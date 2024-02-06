@@ -68,20 +68,23 @@ export const createAdmin = async () => {
 	return user;
 };
 
-export const createBooking = async (user: UserEntity, books: BookEntity) => {
-	const booking = new BookEntity();
+export const createBook = async (user: UserEntity, books: BookEntity) => {
+	const book = new BookEntity();
 
-	booking.startDate = "2022-03-26T00:15:23.138Z" as any;
-	booking.endDate = "2022-03-26T00:15:23.138Z" as any;
-	booking.cost = 100;
-	booking.user = user;
+	book.title = "48 Laws of Power" as any;
+	book.writer = "Robert Green" as any;
+	book.price = 5;
+	book.coverImage =
+		"https://images-na.ssl-images-amazon.com/images/I/51Ga5GuElyL._AC_SX184_.jpg";
+	book.tag = "essay";
+	// book.user = user;
 
-	await DB.getRepository(BookEntity).save(booking);
+	await DB.getRepository(BookEntity).save(book);
 
-	return booking;
+	return book;
 };
 
-export const clearBookings = async () => {
+export const clearBooks = async () => {
 	const bookingRepository = await DB.getRepository(BookEntity);
 	await bookingRepository.query(
 		`TRUNCATE "booking" RESTART IDENTITY CASCADE;`

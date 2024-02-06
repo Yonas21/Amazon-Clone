@@ -6,8 +6,16 @@ import {
 	Relation,
 	CreateDateColumn,
 } from "typeorm";
-import { IsNumber, IsNotEmpty, IsDateString } from "class-validator";
+import { IsNumber, IsNotEmpty, IsDateString, IsString } from "class-validator";
 import { UserEntity } from "./user.entity";
+import { OrderEntity } from "./order.entity";
+
+enum Tag {
+	FICTION = "fiction",
+	NON_FICTION = "non-fiction",
+	SCIENCE = "science",
+	ESSAY = "essay",
+}
 
 @Entity("books")
 export class BookEntity {
@@ -15,22 +23,28 @@ export class BookEntity {
 	id!: number;
 
 	@Column()
-	@IsDateString()
-	startDate!: Date;
+	@IsString()
+	title!: String;
 
 	@Column()
-	@IsDateString()
-	endDate!: Date;
+	@IsString()
+	writer!: String;
 
 	@Column()
-	@IsNotEmpty()
+	@IsString()
+	coverImage!: String;
+
+	@Column()
 	@IsNumber()
-	cost!: number;
+	price!: Number;
 
 	@Column()
-	@CreateDateColumn()
-	createdAt!: Date;
+	@IsString()
+	tag!: string;
 
 	@ManyToOne(() => UserEntity, (user) => user.books)
 	user!: Relation<UserEntity>;
+
+	// @ManyToOne(() => OrderEntity, (order) => order.book)
+	// orders!: Relation<OrderEntity>[];
 }

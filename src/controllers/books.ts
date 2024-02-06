@@ -50,28 +50,31 @@ export class BooksController {
 	};
 
 	public create = async (req: Request, res: Response) => {
-		const { startDate, endDate, cost, destinationId } = req.body;
+		const { title, writer, coverImage, price, tag } = req.body;
 		const books = new BookEntity();
 
-		const userId = res.locals.jwtPayload.userId;
+		console.log(req.body);
+		// const userId = res.locals.jwtPayload.userId;
 
-		let user;
-		try {
-			user = await this.userRepository.findOneOrFail({
-				where: {
-					id: Number(userId),
-				},
-			});
-		} catch (error) {
-			res.status(400).send("Provide valid user for booking");
-			return;
-		}
+		// let user;
+		// try {
+		// 	user = await this.userRepository.findOneOrFail({
+		// 		where: {
+		// 			id: Number(userId),
+		// 		},
+		// 	});
+		// } catch (error) {
+		// 	res.status(400).send("Provide valid user for booking");
+		// 	return;
+		// }
 
-		books.startDate = startDate;
-		books.endDate = endDate;
-		books.cost = cost;
+		books.title = title;
+		books.writer = writer;
+		books.coverImage = coverImage;
+		books.price = price;
+		books.tag = tag;
 
-		books.user = user;
+		// books.user = user;
 
 		const errors = await validate(books);
 		if (errors.length > 0) {
@@ -91,12 +94,12 @@ export class BooksController {
 
 	public update = async (req: Request, res: Response) => {
 		const id = req.params.id;
-		const { startDate, endDate, cost } = req.body;
+		const { title, writer, coverImage, price, tag } = req.body;
 
-		let booking;
+		let book;
 
 		try {
-			booking = await this.booksRepository.findOneOrFail({
+			book = await this.booksRepository.findOneOrFail({
 				where: {
 					id: Number(id),
 				},
@@ -106,12 +109,14 @@ export class BooksController {
 			return;
 		}
 
-		booking.startDate = startDate;
-		booking.endDate = endDate;
-		booking.cost = cost;
+		book.title = title;
+		book.writer = writer;
+		book.coverImage = coverImage;
+		book.price = price;
+		book.tag = tag;
 
 		try {
-			await this.booksRepository.save(booking);
+			await this.booksRepository.save(book);
 		} catch (e) {
 			res.status(400).send("Could not update user");
 			return;
