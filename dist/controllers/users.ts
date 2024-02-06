@@ -1,11 +1,162 @@
-import { NextFunction, Request, Response } from "express";
-import usersModel from "../models/users";
+import { validate } from "class-validator";
+import { Router, Response, Request } from "express";
+import { UserEntity } from "../entities";
+import { UserRepository } from "../repository";
 
-const userController = {
-  getUsers: (req: Request, res: Response, next: NextFunction) => {
-    const users = usersModel.getUsers();
-    res.send(users);
-  },
-};
+export class UserController {
+	public router: Router;
+	private userRepository: typeof UserRepository;
 
-export default userController;
+	constructor() {
+		this.userRepository = UserRepository;
+		this.router = Router();
+		this.routes();
+	}
+
+	public index = async (req: Request, res: Response) => {
+		try {
+			const users = await this.userRepository.find({
+				select: {
+					id: true,
+					username: true,
+					role: true,
+					books: {
+						id: true,
+					},
+				},
+				relations: {
+					books: {
+						user: true,
+					},
+				},
+				order: {
+					books: {
+						id: "DESC",
+					},
+				},
+			});
+			return res.send(users);
+		} catch (error) {
+			return res.status(500).send("Internal Server Error");
+		}
+	};
+
+	public getOne = async (req: Request, res: Response) => {
+		const id = req["params"]["id"];
+
+		try {
+			const user = await this.userRepository.findOneOrFail({
+				where: {
+					id: Number(id),
+				},
+				select: {
+					id: true,
+					username: true,
+					role: true,
+					books: {
+						id: true,
+					},
+				},
+				relations: {
+					books: {
+						user: true,
+					},
+				},
+				order: {
+					books: {
+						id: "DESC",
+					},
+				},
+			});
+
+			return res.send(user);
+		} catch (error) {
+			return res.status(404).send("User not found");
+		}
+	};
+
+	public create = async (req: Request, res: Response) => {
+		const { username, password, role } = req.body;
+		const user = new UserEntity();
+		user.username = username;
+		user.password = password;
+		user.role = role;
+
+		const errors = await validate(user);
+		if (errors.length > 0) {
+			res.status(400).send(errors);
+			return;
+		}
+
+		user.hashPassword();
+
+		try {
+			await this.userRepository.save(user);
+		} catch (e) {
+			res.status(409).send("Username already in use");
+			return;
+		}
+
+		res.status(201).send("User created");
+	};
+
+	public update = async (req: Request, res: Response) => {
+		const id = req.params.id;
+
+		const { username, role } = req.body;
+
+		let user;
+		try {
+			user = await this.userRepository.findOneOrFail({
+				where: {
+					id: Number(id),
+				},
+			});
+		} catch (error) {
+			res.status(404).send("User not found");
+			return;
+		}
+
+		user.username = username;
+		user.role = role;
+		const errors = await validate(user);
+		if (errors.length > 0) {
+			res.status(400).send(errors);
+			return;
+		}
+
+		try {
+			await this.userRepository.save(user);
+		} catch (e) {
+			res.status(400).send("Could not update user");
+			return;
+		}
+		res.status(204).send();
+	};
+
+	public delete = async (req: Request, res: Response) => {
+		const id = req.params.id;
+
+		try {
+			await this.userRepository.findOneOrFail({
+				where: {
+					id: Number(id),
+				},
+			});
+		} catch (error) {
+			res.status(404).send("User not found");
+			return;
+		}
+		this.userRepository.delete(id);
+
+		res.status(204).send();
+	};
+
+	public routes() {
+		this.router.get("/", this.index);
+		this.router.get("/:id", this.getOne);
+		this.router.post("/", this.create);
+		this.router.put("/:id", this.update);
+		this.router.delete("/:id", this.delete);
+	}
+}

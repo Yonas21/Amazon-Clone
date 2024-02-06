@@ -1,22 +1,57 @@
-import express, {Application } from "express";
-import path from "path";
-import cookieParser from "cookie-parser";
-import logger from "morgan";
-import { dirname } from "dirname-filename-esm";
+import express, { Application } from "express";
+import "reflect-metadata";
+import { initDBWithData } from "./utils";
+import {
+	AuthController,
+	BooksController,
+	UserController,
+} from "./controllers/index";
+import cors from "cors";
+import helmet from "helmet";
 
-import usersRouter from "./routers/users";
+const port = process.env.PORT || 3000;
+console.log(process.env.NODE_ENV);
 
-// app
-const app: Application = express();
+class Server {
+	public express: Application;
 
-// plugins
-app.use(logger(process.env.NODE_ENV === "production" ? "common" : "dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(dirname(import.meta), "../", "public")));
+	constructor() {
+		this.express = express();
+		this.configuration();
+		this.routes();
+		if (process.env.NODE_ENV !== "test") {
+			this.start();
+		}
+	}
 
-// routers
-app.use("/users", usersRouter);
+	public configuration() {
+		this.express.use(cors());
+		this.express.use(helmet());
+		this.express.use(express.json());
+	}
 
-export default app;
+	public async routes() {
+		if (process.env.NODE_ENV !== "test") {
+			initDBWithData().then(() => {
+				this.express.use(`/api/users/`, new UserController().router);
+				this.express.use(
+					`/api/bookings/`,
+					new BooksController().router
+				);
+				this.express.use(`/api/auth/`, new AuthController().router);
+			});
+		} else {
+			this.express.use(`/api/users/`, new UserController().router);
+			this.express.use(`/api/bookings/`, new BooksController().router);
+			this.express.use(`/api/auth/`, new AuthController().router);
+		}
+	}
+
+	public start() {
+		this.express.listen(port, () => {
+			console.log(`server started at http://localhost:${port}`);
+		});
+	}
+}
+
+export default new Server().express;

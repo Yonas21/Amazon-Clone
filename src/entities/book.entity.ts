@@ -3,6 +3,7 @@ import {
 	PrimaryGeneratedColumn,
 	Column,
 	ManyToOne,
+	Relation,
 	CreateDateColumn,
 } from "typeorm";
 import { IsNumber, IsNotEmpty, IsDateString } from "class-validator";
@@ -31,5 +32,5 @@ export class BookEntity {
 	createdAt!: Date;
 
 	@ManyToOne(() => UserEntity, (user) => user.books)
-	user!: UserEntity;
+	user!: Relation<UserEntity>;
 }

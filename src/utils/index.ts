@@ -3,7 +3,7 @@ import { DataSourceOptions, DataSource } from "typeorm";
 import { BookEntity, UserEntity } from "../entities";
 
 const connectOptions: DataSourceOptions = {
-	type: process.env.DB_TYPE as "postgres",
+	type: "postgres",
 	host: process.env.DB_HOST,
 	port: Number(process.env.DB_PORT),
 	username: process.env.DB_USERNAME,
@@ -68,10 +68,7 @@ export const createAdmin = async () => {
 	return user;
 };
 
-export const createBooking = async (
-	user: UserEntity,
-	destination: BookEntity
-) => {
+export const createBooking = async (user: UserEntity, books: BookEntity) => {
 	const booking = new BookEntity();
 
 	booking.startDate = "2022-03-26T00:15:23.138Z" as any;
