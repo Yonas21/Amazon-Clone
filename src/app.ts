@@ -34,15 +34,12 @@ class Server {
 		if (process.env.NODE_ENV !== "test") {
 			initDBWithData().then(() => {
 				this.express.use(`/api/users/`, new UserController().router);
-				this.express.use(
-					`/api/bookings/`,
-					new BooksController().router
-				);
+				this.express.use(`/api/books/`, new BooksController().router);
 				this.express.use(`/api/auth/`, new AuthController().router);
 			});
 		} else {
 			this.express.use(`/api/users/`, new UserController().router);
-			this.express.use(`/api/bookings/`, new BooksController().router);
+			this.express.use(`/api/books/`, new BooksController().router);
 			this.express.use(`/api/auth/`, new AuthController().router);
 		}
 	}
