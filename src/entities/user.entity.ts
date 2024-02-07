@@ -9,10 +9,9 @@ import {
 	ManyToOne,
 } from "typeorm";
 
-import { Length, IsNotEmpty, IsString } from "class-validator";
+import { Length, IsNotEmpty, IsString, IsNumber } from "class-validator";
 import bcrypt from "bcryptjs";
 import { BookEntity } from "./book.entity";
-import { BuyEntity } from "./buy.entity";
 import { OrderEntity } from "./order.entity";
 
 @Entity("user")
@@ -43,11 +42,13 @@ export class UserEntity {
 	@UpdateDateColumn()
 	updatedAt!: Date;
 
+
+	@Column()
+	@IsNumber()
+	points!: Number;
+
 	@OneToMany(() => BookEntity, (books) => books)
 	books!: BookEntity[];
-
-	@ManyToOne(() => BuyEntity, (buys) => buys)
-	buys!: BuyEntity[];
 
 	@OneToMany(() => OrderEntity, (buys) => buys)
 	orders!: OrderEntity[];

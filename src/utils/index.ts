@@ -87,7 +87,7 @@ export const createBook = async (user: UserEntity, books: BookEntity) => {
 export const clearBooks = async () => {
 	const bookingRepository = await DB.getRepository(BookEntity);
 	await bookingRepository.query(
-		`TRUNCATE "booking" RESTART IDENTITY CASCADE;`
+		`TRUNCATE "books" RESTART IDENTITY CASCADE;`
 	);
 };
 
