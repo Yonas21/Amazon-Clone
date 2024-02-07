@@ -1,13 +1,12 @@
 import express, { Application } from "express";
 import "reflect-metadata";
-import { initDBWithData } from "./utils";
-import {
-	AuthController,
-	BooksController,
-	UserController,
-} from "./controllers/index";
 import cors from "cors";
 import helmet from "helmet";
+
+import { initDBWithData } from "./utils";
+import userRoutes from './routers/users'
+import bookRoutes from './routers/books'
+import authRoutes from './routers/auth'
 
 const port = process.env.PORT || 3000;
 console.log(process.env.NODE_ENV);
@@ -33,14 +32,14 @@ class Server {
 	public async routes() {
 		if (process.env.NODE_ENV !== "test") {
 			initDBWithData().then(() => {
-				this.express.use(`/api/users/`, new UserController().router);
-				this.express.use(`/api/books/`, new BooksController().router);
-				this.express.use(`/api/auth/`, new AuthController().router);
+				this.express.use(`/api/users/`, userRoutes);
+				this.express.use(`/api/books/`, bookRoutes);
+				this.express.use(`/api/auth/`, authRoutes);
 			});
 		} else {
-			this.express.use(`/api/users/`, new UserController().router);
-			this.express.use(`/api/books/`, new BooksController().router);
-			this.express.use(`/api/auth/`, new AuthController().router);
+			this.express.use(`/api/users/`, userRoutes);
+			this.express.use(`/api/books/`, bookRoutes);
+			this.express.use(`/api/auth/`, authRoutes);
 		}
 	}
 

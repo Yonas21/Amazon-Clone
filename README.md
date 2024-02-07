@@ -30,22 +30,11 @@ DB_SYNCHRONIZE=true
 JWT_SECRET=secret
 ```
 
-# Run docker compose for Postgres DB
-
-```
-docker-compose up
-```
 
 # Start dev server and seed database with initial data
 
 ```
 npm run dev
-```
-
-# Run tests against Postgres DB with jest & supertest
-
-```
-npm run test
 ```
 
 # Lint code to detect issues
@@ -84,7 +73,7 @@ generated-token
 # Create booking
 
 ```bash
-POST http://localhost:3000/api/bookings
+POST http://localhost:3000/api/books
 ```
 
 ```json
@@ -99,19 +88,19 @@ POST http://localhost:3000/api/bookings
 # Get all bookings
 
 ```bash
-GET http://localhost:3000/api/bookings
+GET http://localhost:3000/api/books
 ```
 
 # Get single booking
 
 ```bash
-GET http://localhost:3000/api/bookings/:id
+GET http://localhost:3000/api/books/:id
 ```
 
 # Update booking
 
 ```bash
-PUT http://localhost:3000/api/bookings/:id
+PUT http://localhost:3000/api/books/:id
 ```
 
 ```json
@@ -125,7 +114,7 @@ PUT http://localhost:3000/api/bookings/:id
 # Delete booking
 
 ```bash
-DELETE http://localhost:3000/api/bookings/:id
+DELETE http://localhost:3000/api/books/:id
 ```
 
 # Create destination

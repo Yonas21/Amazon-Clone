@@ -5,13 +5,10 @@ import jwt from "jsonwebtoken";
 import { validate } from "class-validator";
 
 export class AuthController {
-	public router: Router;
 	private userRepository: typeof UserRepository;
 
 	constructor() {
 		this.userRepository = UserRepository;
-		this.router = Router();
-		this.routes();
 	}
 
 	public login = async (req: Request, res: Response) => {
@@ -72,8 +69,4 @@ export class AuthController {
 		res.status(204).send();
 	};
 
-	public routes() {
-		this.router.post("/login", this.login);
-		this.router.post("/change-password", this.changePassword);
-	}
 }

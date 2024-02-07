@@ -4,15 +4,12 @@ import { BookEntity } from "../entities";
 import { BooksRepository, UserRepository } from "../repository";
 
 export class BooksController {
-	public router: Router;
 	private booksRepository: typeof BooksRepository;
 	private userRepository: typeof UserRepository;
 
 	constructor() {
 		this.booksRepository = BooksRepository;
 		this.userRepository = UserRepository;
-		this.router = Router();
-		this.routes();
 	}
 
 	public index = async (req: Request, res: Response) => {
@@ -143,11 +140,4 @@ export class BooksController {
 		res.status(204).send();
 	};
 
-	public routes() {
-		this.router.get("/", this.index);
-		this.router.get("/:id", this.getOne);
-		this.router.post("/", this.create);
-		this.router.put("/:id", this.update);
-		this.router.delete("/:id", this.delete);
-	}
 }

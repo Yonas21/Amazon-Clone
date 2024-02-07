@@ -1,11 +1,17 @@
-import express from 'express';
-const router = express.Router();
+// userRoutes.ts
 
-router.get('/', function (req, res, next) {
-  res.send([
-    { name: "tj", title: "the man who created Express.js", github: "https://github.com/tj" },
-    { name: "Dalufishe", title: "haha! this is me", github: "https://github.com/Dalufishe" },
-  ]);
-});
+import express from 'express';
+import { UserController } from '../controllers/users';
+
+const router = express.Router();
+const userController = new UserController();
+
+
+// Define routes for creating, updating, and deleting users
+router.get("/", userController.index);
+router.get("/:id", userController.getOne);
+router.post("/", userController.create);
+router.put("/:id", userController.update);
+router.delete("/:id", userController.delete);
 
 export default router;
