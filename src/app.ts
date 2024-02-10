@@ -4,9 +4,10 @@ import cors from "cors";
 import helmet from "helmet";
 
 import { initDBWithData } from "./utils";
-import userRoutes from './routers/users'
-import bookRoutes from './routers/books'
-import authRoutes from './routers/auth'
+import userRoutes from "./routers/users";
+import bookRoutes from "./routers/books";
+import authRoutes from "./routers/auth";
+import orderRoutes from "./routers/order";
 
 const port = process.env.PORT || 3000;
 console.log(process.env.NODE_ENV);
@@ -35,11 +36,13 @@ class Server {
 				this.express.use(`/api/users/`, userRoutes);
 				this.express.use(`/api/books/`, bookRoutes);
 				this.express.use(`/api/auth/`, authRoutes);
+				this.express.use(`/api/order/`, orderRoutes);
 			});
 		} else {
 			this.express.use(`/api/users/`, userRoutes);
 			this.express.use(`/api/books/`, bookRoutes);
 			this.express.use(`/api/auth/`, authRoutes);
+			this.express.use(`/api/order/`, orderRoutes);
 		}
 	}
 

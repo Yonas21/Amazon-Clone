@@ -78,6 +78,7 @@ export class UserController {
 		user.username = username;
 		user.password = password;
 		user.role = role;
+		user.points = 100;
 
 		const errors = await validate(user);
 		if (errors.length > 0) {
@@ -148,5 +149,4 @@ export class UserController {
 
 		res.status(204).send();
 	};
-
 }

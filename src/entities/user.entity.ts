@@ -42,7 +42,6 @@ export class UserEntity {
 	@UpdateDateColumn()
 	updatedAt!: Date;
 
-
 	@Column()
 	@IsNumber()
 	points!: Number;

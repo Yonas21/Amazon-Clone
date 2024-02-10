@@ -62,6 +62,7 @@ export const createAdmin = async () => {
 	user.password = "admin";
 	user.hashPassword();
 	user.role = "ADMIN";
+	user.points = 100;
 
 	await DB.getRepository(UserEntity).save(user);
 
@@ -86,9 +87,7 @@ export const createBook = async (user: UserEntity, books: BookEntity) => {
 
 export const clearBooks = async () => {
 	const bookingRepository = await DB.getRepository(BookEntity);
-	await bookingRepository.query(
-		`TRUNCATE "books" RESTART IDENTITY CASCADE;`
-	);
+	await bookingRepository.query(`TRUNCATE "books" RESTART IDENTITY CASCADE;`);
 };
 
 export const dropDB = async () => {

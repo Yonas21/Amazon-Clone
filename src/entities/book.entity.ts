@@ -45,6 +45,6 @@ export class BookEntity {
 	@ManyToOne(() => UserEntity, (user) => user.books)
 	user!: Relation<UserEntity>;
 
-	@ManyToOne(() => OrderEntity, (order) => order.book)
-	orders!: Relation<OrderEntity>[];
+	@ManyToOne(() => OrderEntity, (order) => order.books)
+	orders!: Relation<OrderEntity>;
 }

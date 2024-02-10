@@ -23,9 +23,9 @@ export class OrderEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
-	@OneToMany(() => BookEntity, (book) => book.id)
-	book!: Relation<OrderEntity>;
+	@ManyToOne(() => BookEntity, (book) => book.orders)
+	books!: Relation<BookEntity>;
 
-	@ManyToOne(() => UserEntity, (user) => user.id)
+	@ManyToOne(() => UserEntity, (user) => user)
 	user!: Relation<UserEntity>;
 }

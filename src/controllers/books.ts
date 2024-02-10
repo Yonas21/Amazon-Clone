@@ -51,19 +51,19 @@ export class BooksController {
 		const books = new BookEntity();
 
 		console.log(req.body);
-		// const userId = res.locals.jwtPayload.userId;
+		const userId = res.locals.jwtPayload.userId;
 
-		// let user;
-		// try {
-		// 	user = await this.userRepository.findOneOrFail({
-		// 		where: {
-		// 			id: Number(userId),
-		// 		},
-		// 	});
-		// } catch (error) {
-		// 	res.status(400).send("Provide valid user for booking");
-		// 	return;
-		// }
+		let user;
+		try {
+			user = await this.userRepository.findOneOrFail({
+				where: {
+					id: Number(userId),
+				},
+			});
+		} catch (error) {
+			res.status(400).send("Provide valid user for booking");
+			return;
+		}
 
 		books.title = title;
 		books.writer = writer;
@@ -71,7 +71,7 @@ export class BooksController {
 		books.price = price;
 		books.tag = tag;
 
-		// books.user = user;
+		books.user = user;
 
 		const errors = await validate(books);
 		if (errors.length > 0) {
@@ -139,5 +139,4 @@ export class BooksController {
 
 		res.status(204).send();
 	};
-
 }
