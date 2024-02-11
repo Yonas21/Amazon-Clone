@@ -87,15 +87,19 @@ export class OrderController {
 
 		orders.user = user;
 		orders.books = book;
+		orders.points = book.price;
 
-		const errors = await validate(book);
+		const errors = await validate(orders);
 		if (errors.length > 0) {
 			res.status(400).send(errors);
 			return;
 		}
 
 		try {
-			await this.booksRepository.save(book);
+			await this.orderRepository.save(orders);
+
+			user.points = <number>user.points - <number>book.price;
+			this.userRepository.save(user);
 		} catch (e) {
 			res.status(409).send("Order already Done");
 			return;

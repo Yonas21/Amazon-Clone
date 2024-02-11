@@ -32,7 +32,7 @@ export class BooksController {
 		const id = req["params"]["id"];
 
 		try {
-			const destination = await this.booksRepository.findOneOrFail({
+			const book = await this.booksRepository.findOneOrFail({
 				where: {
 					id: Number(id),
 				},
@@ -40,7 +40,7 @@ export class BooksController {
 					user: true,
 				},
 			});
-			return res.send(destination);
+			return res.send(book);
 		} catch (error) {
 			return res.status(400).send("Not found");
 		}

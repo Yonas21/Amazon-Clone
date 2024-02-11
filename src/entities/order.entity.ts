@@ -11,21 +11,18 @@ import { IsNumber, IsNotEmpty, IsDateString, IsString } from "class-validator";
 import { BookEntity } from "./book.entity";
 import { UserEntity } from "./user.entity";
 
-enum Tag {
-	FICTION = "fiction",
-	NON_FICTION = "non-fiction",
-	SCIENCE = "science",
-	ESSAY = "essay",
-}
-
 @Entity("orders")
 export class OrderEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
-	@ManyToOne(() => BookEntity, (book) => book.orders)
+	@Column()
+	@IsNumber()
+	points!: Number;
+
+	@ManyToOne(() => BookEntity, (book) => book)
 	books!: Relation<BookEntity>;
 
-	@ManyToOne(() => UserEntity, (user) => user)
+	@ManyToOne(() => UserEntity, (user) => user.orders)
 	user!: Relation<UserEntity>;
 }

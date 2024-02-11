@@ -7,6 +7,7 @@ import {
 	UpdateDateColumn,
 	OneToMany,
 	ManyToOne,
+	JoinColumn,
 } from "typeorm";
 
 import { Length, IsNotEmpty, IsString, IsNumber } from "class-validator";
@@ -46,10 +47,11 @@ export class UserEntity {
 	@IsNumber()
 	points!: Number;
 
-	@OneToMany(() => BookEntity, (books) => books)
+	// Corrected OneToMany decorators
+	@OneToMany(() => BookEntity, (book) => book.user, { cascade: true })
 	books!: BookEntity[];
 
-	@OneToMany(() => OrderEntity, (buys) => buys)
+	@OneToMany(() => OrderEntity, (order) => order.user, { cascade: true })
 	orders!: OrderEntity[];
 
 	hashPassword() {
