@@ -4,7 +4,6 @@ import { jwtSecret } from "../utils";
 
 export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
 	const token = <string>req.headers["auth"];
-
 	let jwtPayload;
 	try {
 		jwtPayload = jwt.verify(token, jwtSecret);

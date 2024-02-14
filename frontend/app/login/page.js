@@ -41,7 +41,7 @@ function Login() {
 	};
 
 	useEffect(() => {
-		if (data) {
+		if (Object.values(data).length > 0) {
 			console.log(data);
 			toast.success("User Successfully Logged IN !!!", {
 				position: "top-right",

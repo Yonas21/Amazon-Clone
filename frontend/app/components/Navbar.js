@@ -7,22 +7,29 @@ import { AiOutlineNodeCollapse } from "react-icons/ai";
 const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [valid, setvalid] = useState(false);
-	const navLinks = [
+	const [navLinks, setnavLinks] = useState([
 		{ href: "/", label: "Home" },
 		{ href: "/orders", label: "Orders" },
 		{ href: "#about-us", label: "About Us" },
 		{ href: "#contact-us", label: "Contact Us" },
 		{ href: "/signup", label: "Signup" },
 		{ href: "/login", label: "Login" },
-	];
+	]);
 
 	useEffect(() => {
 		if (localStorage.getItem("token")) {
 			setvalid(true);
 		}
-	}, []);
 
-	console.log("valid", valid);
+		if (valid) {
+			const modifiedNavLinks = navLinks.filter((link, index) => {
+				// Return true for all elements except the last two
+				return index < navLinks.length - 2;
+			});
+			modifiedNavLinks.push({ href: "/logout", label: "Logout" }),
+				setnavLinks(modifiedNavLinks);
+		}
+	}, [valid]);
 
 	return (
 		<header className="sm:px-8 px-4 py-2 z-10 w-full">

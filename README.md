@@ -30,7 +30,6 @@ DB_SYNCHRONIZE=true
 JWT_SECRET=secret
 ```
 
-
 # Start dev server and seed database with initial data
 
 ```
@@ -78,10 +77,11 @@ POST http://localhost:3000/api/books
 
 ```json
 {
-	"startDate": "2022-03-24 18:46:55.223294",
-	"endDate": "2022-03-24 18:46:55.223294",
-	"cost": 100,
-	"destinationId": 1
+	"title": "The Art of War",
+	"writer": "SanZu",
+	"coverImage": "https://images-na.ssl-images-amazon.com/images/I/51Ga5GuElyL._AC_SX184_.jpg",
+	"price": 2,
+	"tag": "Fiction"
 }
 ```
 
@@ -105,9 +105,11 @@ PUT http://localhost:3000/api/books/:id
 
 ```json
 {
-	"startDate": "2022-03-24 18:46:55.223294",
-	"endDate": "2022-03-24 18:46:55.223294",
-	"cost": 10000
+	"title": "The Art of War",
+	"writer": "SanZu",
+	"coverImage": "https://images-na.ssl-images-amazon.com/images/I/51Ga5GuElyL._AC_SX184_.jpg",
+	"price": 2,
+	"tag": "Fiction"
 }
 ```
 
@@ -117,34 +119,50 @@ PUT http://localhost:3000/api/books/:id
 DELETE http://localhost:3000/api/books/:id
 ```
 
-# Create destination
+# Create Order
 
 ```bash
-POST http://localhost:3000/api/destinations
+POST http://localhost:3000/api/order
 ```
 
 ```json
 {
-	"name": "New York",
-	"description": "description",
-	"state": "New York",
-	"city": "New York",
-	"cost": 100,
-	"maxGuests": 2,
-	"available": true
+	"book_id": 1
 }
 ```
 
-# Get all destinations
+# Get all Orders
 
 ```bash
 GET http://localhost:3000/api/destinations
 ```
 
-# Get single destination
+```json
+[
+	{
+		"title": "The Art of War",
+		"writer": "SanZu",
+		"coverImage": "https://images-na.ssl-images-amazon.com/images/I/51Ga5GuElyL._AC_SX184_.jpg",
+		"price": 2,
+		"tag": "Fiction"
+	}
+]
+```
+
+# Get single order
 
 ```bash
 GET http://localhost:3000/api/destinations/:id
+```
+
+```json
+{
+	"title": "The Art of War",
+	"writer": "SanZu",
+	"coverImage": "https://images-na.ssl-images-amazon.com/images/I/51Ga5GuElyL._AC_SX184_.jpg",
+	"price": 2,
+	"tag": "Fiction"
+}
 ```
 
 # Update destination
@@ -155,11 +173,7 @@ PUT http://localhost:3000/api/destinations/:id
 
 ```json
 {
-	"name": "Los Angeles",
-	"state": "California",
-	"city": "Los Angeles",
-	"cost": 100,
-	"maxGuests": 2
+	"book_id": 1
 }
 ```
 
@@ -167,4 +181,10 @@ PUT http://localhost:3000/api/destinations/:id
 
 ```bash
 DELETE http://localhost:3000/api/destinations/:id
+```
+
+```json
+{
+	"book_id": 1
+}
 ```
